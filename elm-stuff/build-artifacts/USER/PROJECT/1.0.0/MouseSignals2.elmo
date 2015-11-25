@@ -1,0 +1,33 @@
+Elm.MouseSignals2 = Elm.MouseSignals2 || {};
+Elm.MouseSignals2.make = function (_elm) {
+   "use strict";
+   _elm.MouseSignals2 = _elm.MouseSignals2 || {};
+   if (_elm.MouseSignals2.values)
+   return _elm.MouseSignals2.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "MouseSignals2",
+   $Basics = Elm.Basics.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Mouse = Elm.Mouse.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var combine = F2(function (a,
+   b) {
+      return $Graphics$Element.show({ctor: "_Tuple2"
+                                    ,_0: a
+                                    ,_1: b});
+   });
+   var main = A3($Signal.map2,
+   combine,
+   $Mouse.x,
+   $Mouse.y);
+   _elm.MouseSignals2.values = {_op: _op
+                               ,combine: combine
+                               ,main: main};
+   return _elm.MouseSignals2.values;
+};

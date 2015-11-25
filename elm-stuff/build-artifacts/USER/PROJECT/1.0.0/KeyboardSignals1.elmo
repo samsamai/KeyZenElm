@@ -1,0 +1,25 @@
+Elm.KeyboardSignals1 = Elm.KeyboardSignals1 || {};
+Elm.KeyboardSignals1.make = function (_elm) {
+   "use strict";
+   _elm.KeyboardSignals1 = _elm.KeyboardSignals1 || {};
+   if (_elm.KeyboardSignals1.values)
+   return _elm.KeyboardSignals1.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "KeyboardSignals1",
+   $Basics = Elm.Basics.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $Keyboard = Elm.Keyboard.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var main = A2($Signal._op["<~"],
+   $Graphics$Element.show,
+   $Keyboard.keysDown);
+   _elm.KeyboardSignals1.values = {_op: _op
+                                  ,main: main};
+   return _elm.KeyboardSignals1.values;
+};

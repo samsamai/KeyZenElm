@@ -1,0 +1,158 @@
+Elm.TicTacToeView = Elm.TicTacToeView || {};
+Elm.TicTacToeView.make = function (_elm) {
+   "use strict";
+   _elm.TicTacToeView = _elm.TicTacToeView || {};
+   if (_elm.TicTacToeView.values)
+   return _elm.TicTacToeView.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "TicTacToeView",
+   $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
+   $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $Graphics$Input = Elm.Graphics.Input.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Text = Elm.Text.make(_elm),
+   $TicTacToeModel = Elm.TicTacToeModel.make(_elm);
+   var undoMailbox = $Signal.mailbox({ctor: "_Tuple0"});
+   var undoButton = A2($Graphics$Input.button,
+   A2($Signal.message,
+   undoMailbox.address,
+   {ctor: "_Tuple0"}),
+   "Undo");
+   var newGameMailbox = $Signal.mailbox({ctor: "_Tuple0"});
+   var newGameButton = A2($Graphics$Input.button,
+   A2($Signal.message,
+   newGameMailbox.address,
+   {ctor: "_Tuple0"}),
+   "New Game");
+   var stateDescription = function (state) {
+      return function () {
+         switch (state.ctor)
+         {case "FinishedGame":
+            switch (state._0.ctor)
+              {case "Draw":
+                 return "Game Over. Draw";
+                 case "Winner":
+                 return A2($Basics._op["++"],
+                   "Game Over. Winner: ",
+                   $Basics.toString(state._0._0));}
+              break;
+            case "NotFinishedGame":
+            return A2($Basics._op["++"],
+              "Next move: ",
+              $Basics.toString(state._0));}
+         _U.badCase($moduleName,
+         "between lines 46 and 49");
+      }();
+   };
+   var drawMoves = function (state) {
+      return function () {
+         var moveSign = function (player) {
+            return $Graphics$Collage.group(function () {
+               switch (player.ctor)
+               {case "O":
+                  return _L.fromArray([$Graphics$Collage.filled($Color.black)($Graphics$Collage.circle(30))
+                                      ,$Graphics$Collage.filled($Color.white)($Graphics$Collage.circle(25))]);
+                  case "X": return function () {
+                       var xline = A2($Graphics$Collage.filled,
+                       $Color.black,
+                       A2($Graphics$Collage.rect,
+                       5,
+                       64));
+                       return _L.fromArray([A2($Graphics$Collage.rotate,
+                                           $Basics.degrees(45),
+                                           xline)
+                                           ,A2($Graphics$Collage.rotate,
+                                           $Basics.degrees(135),
+                                           xline)]);
+                    }();}
+               _U.badCase($moduleName,
+               "between lines 27 and 37");
+            }());
+         };
+         var playerMove = function (_v7) {
+            return function () {
+               switch (_v7.ctor)
+               {case "_Tuple2":
+                  return $Graphics$Collage.move({ctor: "_Tuple2"
+                                                ,_0: $Basics.toFloat(100 * _v7._0.col - 200)
+                                                ,_1: $Basics.toFloat(-100 * _v7._0.row + 200)})(moveSign(_v7._1));}
+               _U.badCase($moduleName,
+               "on line 39, column 13 to 84");
+            }();
+         };
+         return A3($Graphics$Collage.collage,
+         300,
+         300,
+         $List.map(playerMove)($TicTacToeModel.moves(state)));
+      }();
+   };
+   var drawLines = A3($Graphics$Collage.collage,
+   300,
+   300,
+   _L.fromArray([$Graphics$Collage.move({ctor: "_Tuple2"
+                                        ,_0: -50
+                                        ,_1: 0})(A2($Graphics$Collage.filled,
+                $Color.black,
+                A2($Graphics$Collage.rect,
+                3,
+                300)))
+                ,$Graphics$Collage.move({ctor: "_Tuple2"
+                                        ,_0: 50
+                                        ,_1: 0})(A2($Graphics$Collage.filled,
+                $Color.black,
+                A2($Graphics$Collage.rect,
+                3,
+                300)))
+                ,$Graphics$Collage.move({ctor: "_Tuple2"
+                                        ,_0: 0
+                                        ,_1: -50})(A2($Graphics$Collage.filled,
+                $Color.black,
+                A2($Graphics$Collage.rect,
+                300,
+                3)))
+                ,$Graphics$Collage.move({ctor: "_Tuple2"
+                                        ,_0: 0
+                                        ,_1: 50})(A2($Graphics$Collage.filled,
+                $Color.black,
+                A2($Graphics$Collage.rect,
+                300,
+                3)))]));
+   var view = function (state) {
+      return A2($Graphics$Element.flow,
+      $Graphics$Element.down,
+      _L.fromArray([$Graphics$Element.layers(_L.fromArray([drawLines
+                                                          ,drawMoves(state)]))
+                   ,A3($Graphics$Element.container,
+                   300,
+                   60,
+                   $Graphics$Element.middle)($Graphics$Element.leftAligned($Text.fromString(stateDescription(state))))
+                   ,A3($Graphics$Element.container,
+                   300,
+                   60,
+                   $Graphics$Element.middle)(A2($Graphics$Element.flow,
+                   $Graphics$Element.right,
+                   _L.fromArray([undoButton
+                                ,A2($Graphics$Element.spacer,
+                                20,
+                                20)
+                                ,newGameButton])))]));
+   };
+   _elm.TicTacToeView.values = {_op: _op
+                               ,drawLines: drawLines
+                               ,drawMoves: drawMoves
+                               ,stateDescription: stateDescription
+                               ,newGameMailbox: newGameMailbox
+                               ,newGameButton: newGameButton
+                               ,undoMailbox: undoMailbox
+                               ,undoButton: undoButton
+                               ,view: view};
+   return _elm.TicTacToeView.values;
+};

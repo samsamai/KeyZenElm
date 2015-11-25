@@ -1,0 +1,296 @@
+Elm.CalculatorView = Elm.CalculatorView || {};
+Elm.CalculatorView.make = function (_elm) {
+   "use strict";
+   _elm.CalculatorView = _elm.CalculatorView || {};
+   if (_elm.CalculatorView.values)
+   return _elm.CalculatorView.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "CalculatorView",
+   $Basics = Elm.Basics.make(_elm),
+   $CalculatorModel = Elm.CalculatorModel.make(_elm),
+   $Color = Elm.Color.make(_elm),
+   $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $Graphics$Input = Elm.Graphics.Input.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Text = Elm.Text.make(_elm);
+   var display = function (state) {
+      return A3($Graphics$Collage.collage,
+      240,
+      60,
+      _L.fromArray([$Graphics$Collage.outlined(_U.replace([["width"
+                                                           ,2]
+                                                          ,["cap"
+                                                           ,$Graphics$Collage.Padded]],
+                   $Graphics$Collage.defaultLine))(A2($Graphics$Collage.rect,
+                   232,
+                   50))
+                   ,$Graphics$Collage.toForm(A4($Graphics$Element.container,
+                   220,
+                   50,
+                   $Graphics$Element.midRight,
+                   $Graphics$Element.leftAligned($Text.fromString($CalculatorModel.showState(state)))))]));
+   };
+   var makeButton = F2(function (label,
+   size) {
+      return function () {
+         var buttonColor = A3($Color.rgb,
+         199,
+         235,
+         243);
+         var xSize = $CalculatorModel.buttonSize(size);
+         return A3($Graphics$Collage.collage,
+         xSize,
+         60,
+         _L.fromArray([$Graphics$Collage.filled(buttonColor)(A2($Graphics$Collage.rect,
+                      $Basics.toFloat(xSize - 8),
+                      52))
+                      ,$Graphics$Collage.outlined(_U.replace([["width"
+                                                              ,2]
+                                                             ,["cap"
+                                                              ,$Graphics$Collage.Padded]],
+                      $Graphics$Collage.defaultLine))(A2($Graphics$Collage.rect,
+                      $Basics.toFloat(xSize - 8),
+                      52))
+                      ,$Graphics$Collage.toForm($Graphics$Element.centered($Text.bold($Text.height(30)($Text.fromString(label)))))]));
+      }();
+   });
+   var makeButtonAndSignal = F2(function (label,
+   btnSize) {
+      return function () {
+         var buttonMailbox = $Signal.mailbox("");
+         var buttonMessage = A2($Signal.message,
+         buttonMailbox.address,
+         label);
+         var button = A2(makeButton,
+         label,
+         btnSize);
+         var clickableButton = A2($Graphics$Input.clickable,
+         buttonMessage,
+         button);
+         return {ctor: "_Tuple2"
+                ,_0: clickableButton
+                ,_1: buttonMailbox.signal};
+      }();
+   });
+   var $ = A2(makeButtonAndSignal,
+   "0",
+   $CalculatorModel.Regular),
+   button0 = $._0,
+   button0Signal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "1",
+   $CalculatorModel.Regular),
+   button1 = $._0,
+   button1Signal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "2",
+   $CalculatorModel.Regular),
+   button2 = $._0,
+   button2Signal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "3",
+   $CalculatorModel.Regular),
+   button3 = $._0,
+   button3Signal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "4",
+   $CalculatorModel.Regular),
+   button4 = $._0,
+   button4Signal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "5",
+   $CalculatorModel.Regular),
+   button5 = $._0,
+   button5Signal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "6",
+   $CalculatorModel.Regular),
+   button6 = $._0,
+   button6Signal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "7",
+   $CalculatorModel.Regular),
+   button7 = $._0,
+   button7Signal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "8",
+   $CalculatorModel.Regular),
+   button8 = $._0,
+   button8Signal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "9",
+   $CalculatorModel.Regular),
+   button9 = $._0,
+   button9Signal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "=",
+   $CalculatorModel.Regular),
+   buttonEq = $._0,
+   buttonEqSignal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "+",
+   $CalculatorModel.Regular),
+   buttonPlus = $._0,
+   buttonPlusSignal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "-",
+   $CalculatorModel.Regular),
+   buttonMinus = $._0,
+   buttonMinusSignal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "/",
+   $CalculatorModel.Regular),
+   buttonDiv = $._0,
+   buttonDivSignal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "*",
+   $CalculatorModel.Regular),
+   buttonMult = $._0,
+   buttonMultSignal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   ".",
+   $CalculatorModel.Regular),
+   buttonDot = $._0,
+   buttonDotSignal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "C",
+   $CalculatorModel.Large),
+   buttonC = $._0,
+   buttonCSignal = $._1;
+   var $ = A2(makeButtonAndSignal,
+   "CE",
+   $CalculatorModel.Large),
+   buttonCE = $._0,
+   buttonCESignal = $._1;
+   var view = F2(function (value,
+   _v0) {
+      return function () {
+         switch (_v0.ctor)
+         {case "_Tuple2":
+            return A3($Graphics$Element.container,
+              _v0._0,
+              _v0._1,
+              $Graphics$Element.middle)($Graphics$Element.layers(_L.fromArray([A3($Graphics$Collage.collage,
+                                                                              250,
+                                                                              370,
+                                                                              _L.fromArray([$Graphics$Collage.outlined(_U.replace([["width"
+                                                                                                                                   ,3]
+                                                                                                                                  ,["cap"
+                                                                                                                                   ,$Graphics$Collage.Padded]],
+                                                                              $Graphics$Collage.defaultLine))(A2($Graphics$Collage.rect,
+                                                                              248,
+                                                                              368))]))
+                                                                              ,A2($Graphics$Element.flow,
+                                                                              $Graphics$Element.down,
+                                                                              _L.fromArray([A2($Graphics$Element.spacer,
+                                                                                           250,
+                                                                                           5)
+                                                                                           ,A2($Graphics$Element.flow,
+                                                                                           $Graphics$Element.right,
+                                                                                           _L.fromArray([A2($Graphics$Element.spacer,
+                                                                                                        5,
+                                                                                                        60)
+                                                                                                        ,display(value)]))
+                                                                                           ,A2($Graphics$Element.flow,
+                                                                                           $Graphics$Element.right,
+                                                                                           _L.fromArray([A2($Graphics$Element.spacer,
+                                                                                                        5,
+                                                                                                        60)
+                                                                                                        ,buttonCE
+                                                                                                        ,buttonC]))
+                                                                                           ,A2($Graphics$Element.flow,
+                                                                                           $Graphics$Element.right,
+                                                                                           _L.fromArray([A2($Graphics$Element.spacer,
+                                                                                                        5,
+                                                                                                        60)
+                                                                                                        ,buttonPlus
+                                                                                                        ,button1
+                                                                                                        ,button2
+                                                                                                        ,button3]))
+                                                                                           ,A2($Graphics$Element.flow,
+                                                                                           $Graphics$Element.right,
+                                                                                           _L.fromArray([A2($Graphics$Element.spacer,
+                                                                                                        5,
+                                                                                                        60)
+                                                                                                        ,buttonMinus
+                                                                                                        ,button4
+                                                                                                        ,button5
+                                                                                                        ,button6]))
+                                                                                           ,A2($Graphics$Element.flow,
+                                                                                           $Graphics$Element.right,
+                                                                                           _L.fromArray([A2($Graphics$Element.spacer,
+                                                                                                        5,
+                                                                                                        60)
+                                                                                                        ,buttonMult
+                                                                                                        ,button7
+                                                                                                        ,button8
+                                                                                                        ,button9]))
+                                                                                           ,A2($Graphics$Element.flow,
+                                                                                           $Graphics$Element.right,
+                                                                                           _L.fromArray([A2($Graphics$Element.spacer,
+                                                                                                        5,
+                                                                                                        60)
+                                                                                                        ,buttonDiv
+                                                                                                        ,button0
+                                                                                                        ,buttonDot
+                                                                                                        ,buttonEq]))]))])));}
+         _U.badCase($moduleName,
+         "between lines 67 and 87");
+      }();
+   });
+   var main = A2(view,
+   $CalculatorModel.initialState,
+   {ctor: "_Tuple2"
+   ,_0: 600
+   ,_1: 600});
+   _elm.CalculatorView.values = {_op: _op
+                                ,makeButton: makeButton
+                                ,makeButtonAndSignal: makeButtonAndSignal
+                                ,button0: button0
+                                ,button0Signal: button0Signal
+                                ,button1: button1
+                                ,button1Signal: button1Signal
+                                ,button2: button2
+                                ,button2Signal: button2Signal
+                                ,button3: button3
+                                ,button3Signal: button3Signal
+                                ,button4: button4
+                                ,button4Signal: button4Signal
+                                ,button5: button5
+                                ,button5Signal: button5Signal
+                                ,button6: button6
+                                ,button6Signal: button6Signal
+                                ,button7: button7
+                                ,button7Signal: button7Signal
+                                ,button8: button8
+                                ,button8Signal: button8Signal
+                                ,button9: button9
+                                ,button9Signal: button9Signal
+                                ,buttonEq: buttonEq
+                                ,buttonEqSignal: buttonEqSignal
+                                ,buttonPlus: buttonPlus
+                                ,buttonPlusSignal: buttonPlusSignal
+                                ,buttonMinus: buttonMinus
+                                ,buttonMinusSignal: buttonMinusSignal
+                                ,buttonDiv: buttonDiv
+                                ,buttonDivSignal: buttonDivSignal
+                                ,buttonMult: buttonMult
+                                ,buttonMultSignal: buttonMultSignal
+                                ,buttonDot: buttonDot
+                                ,buttonDotSignal: buttonDotSignal
+                                ,buttonC: buttonC
+                                ,buttonCSignal: buttonCSignal
+                                ,buttonCE: buttonCE
+                                ,buttonCESignal: buttonCESignal
+                                ,display: display
+                                ,view: view
+                                ,main: main};
+   return _elm.CalculatorView.values;
+};

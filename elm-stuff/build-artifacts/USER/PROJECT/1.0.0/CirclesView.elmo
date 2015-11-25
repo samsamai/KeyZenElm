@@ -1,0 +1,86 @@
+Elm.CirclesView = Elm.CirclesView || {};
+Elm.CirclesView.make = function (_elm) {
+   "use strict";
+   _elm.CirclesView = _elm.CirclesView || {};
+   if (_elm.CirclesView.values)
+   return _elm.CirclesView.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "CirclesView",
+   $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
+   $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var drawCircle = F3(function (w,
+   h,
+   _v0) {
+      return function () {
+         return $Graphics$Collage.move({ctor: "_Tuple2"
+                                       ,_0: $Basics.toFloat(_v0.position.x) - $Basics.toFloat(w) / 2
+                                       ,_1: $Basics.toFloat(h) / 2 - $Basics.toFloat(_v0.position.y)})(A2($Graphics$Collage.filled,
+         _v0.circleSpec.col,
+         $Graphics$Collage.circle($Basics.toFloat(_v0.circleSpec.radius))));
+      }();
+   });
+   var drawCircles = F3(function (w,
+   h,
+   circles) {
+      return A3($Graphics$Collage.collage,
+      w,
+      h,
+      A2($List.map,
+      A2(drawCircle,w,h),
+      circles));
+   });
+   var boundingBox = F2(function (w,
+   h) {
+      return A3($Graphics$Collage.collage,
+      w,
+      h,
+      _L.fromArray([$Graphics$Collage.outlined($Graphics$Collage.solid($Color.black))(A2($Graphics$Collage.rect,
+                   $Basics.toFloat(w),
+                   $Basics.toFloat(h)))
+                   ,$Graphics$Collage.outlined($Graphics$Collage.solid($Color.black))(A2($Graphics$Collage.rect,
+                   $Basics.toFloat(w - 2),
+                   $Basics.toFloat(h - 2)))]));
+   });
+   var view = F3(function (w,
+   h,
+   circles) {
+      return $Graphics$Element.layers(_L.fromArray([A2(boundingBox,
+                                                   w,
+                                                   h)
+                                                   ,A3(drawCircles,
+                                                   w,
+                                                   h,
+                                                   circles)]));
+   });
+   var main = A3(view,
+   400,
+   400,
+   _L.fromArray([{_: {}
+                 ,circleSpec: {_: {}
+                              ,col: $Color.red
+                              ,radius: 26}
+                 ,position: {_: {},x: 0,y: 0}}
+                ,{_: {}
+                 ,circleSpec: {_: {}
+                              ,col: $Color.green
+                              ,radius: 43}
+                 ,position: {_: {}
+                            ,x: 200
+                            ,y: 200}}]));
+   _elm.CirclesView.values = {_op: _op
+                             ,boundingBox: boundingBox
+                             ,drawCircle: drawCircle
+                             ,drawCircles: drawCircles
+                             ,view: view
+                             ,main: main};
+   return _elm.CirclesView.values;
+};
