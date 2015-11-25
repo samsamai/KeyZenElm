@@ -16,10 +16,11 @@ Elm.KeyElm.make = function (_elm) {
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var actions = $Signal.mailbox({_: {}
-                                 ,sample: "rake db:migragte"
-                                 ,typed: ""});
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var currentChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                          ,_0: "border-bottom"
+                                                          ,_1: "4px solid #f78d1d"}]));
    var myStyle = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
                                                       ,_0: "width"
                                                       ,_1: "100%"}
@@ -36,17 +37,40 @@ Elm.KeyElm.make = function (_elm) {
                                                       ,_0: "text-align"
                                                       ,_1: "center"}]));
    var model = {_: {}
-               ,sample: "rake db:migragte"
-               ,typed: ""};
+               ,current_char: 0
+               ,sample: $String.toList("rake db:migragte")
+               ,typed: _L.fromArray([])};
+   var sample_char = F2(function (index,
+   $char) {
+      return function () {
+         var char_class = _U.eq(index,
+         model.current_char) ? currentChar : $Html$Attributes.style(_L.fromArray([]));
+         return A2($Html.span,
+         _L.fromArray([char_class]),
+         _L.fromArray([$Html.text($String.fromChar($char))]));
+      }();
+   });
+   var sample_word = function (char_list) {
+      return A2($Html.div,
+      _L.fromArray([myStyle]),
+      A2($List.indexedMap,
+      sample_char,
+      char_list));
+   };
+   var actions = $Signal.mailbox({_: {}
+                                 ,current_char: model.current_char + 1
+                                 ,sample: $String.toList("rake db:migragte")
+                                 ,typed: _L.fromArray([])});
    var sendInput = function (str) {
       return $Signal.message(actions.address)({_: {}
+                                              ,current_char: model.current_char
                                               ,sample: model.sample
-                                              ,typed: str});
+                                              ,typed: $String.toList(str)});
    };
    var stringInput = function (model) {
       return A2($Html.input,
-      _L.fromArray([$Html$Attributes.placeholder("Text to reverse")
-                   ,$Html$Attributes.value(model.typed)
+      _L.fromArray([$Html$Attributes.placeholder("")
+                   ,$Html$Attributes.value($String.fromList(model.typed))
                    ,A3($Html$Events.on,
                    "input",
                    $Html$Events.targetValue,
@@ -58,16 +82,19 @@ Elm.KeyElm.make = function (_elm) {
       return A2($Html.div,
       _L.fromArray([]),
       _L.fromArray([stringInput(model)
+                   ,sample_word(model.sample)
                    ,A2($Html.div,
-                   _L.fromArray([myStyle]),
-                   _L.fromArray([$Html.text($Basics.toString(model.sample))]))]));
+                   _L.fromArray([]),
+                   _L.fromArray([$Html.text($Basics.toString(model.current_char))]))]));
    };
    var main = A2($Signal.map,
    view,
    actions.signal);
-   var WordState = F2(function (a,
-   b) {
+   var WordState = F3(function (a,
+   b,
+   c) {
       return {_: {}
+             ,current_char: c
              ,sample: a
              ,typed: b};
    });
@@ -75,9 +102,12 @@ Elm.KeyElm.make = function (_elm) {
                         ,WordState: WordState
                         ,model: model
                         ,view: view
+                        ,sample_word: sample_word
+                        ,sample_char: sample_char
                         ,stringInput: stringInput
                         ,sendInput: sendInput
                         ,myStyle: myStyle
+                        ,currentChar: currentChar
                         ,actions: actions
                         ,main: main};
    return _elm.KeyElm.values;

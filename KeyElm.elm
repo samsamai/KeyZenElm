@@ -11,14 +11,20 @@ import Signal exposing (..)
 import Json.Decode as Json
 import Graphics.Element exposing (..)
 
+
 type alias WordState = {
-       sample: String,
-       typed: String
+       sample: List Char,
+       typed: List Char,
+       current_char: Int
 }
 
+
 model : WordState
-model = 
-    { sample = "rake db:migragte", typed = "" }
+model = {
+    sample = String.toList "rake db:migragte", 
+    typed = [],
+    current_char = 0 }
+
 
 -- VIEW
 view : WordState -> Html
@@ -26,24 +32,47 @@ view model =
   div []
     [
     stringInput model
-    , div [ myStyle ] [ text (toString model.sample) ]
+    , sample_word model.sample,
+    div [] [ text <| toString model.current_char ]
     ]
+
+
+sample_word: List Char -> Html
+sample_word char_list =
+  div [ myStyle ]
+  (List.indexedMap sample_char char_list)
+  --(List.indexedMap sample_char char_list)
+  --(List.indexedMap (\i x -> sample_char) char_list)
+
+
+sample_char: Int -> Char -> Html
+sample_char index char = 
+  let
+    char_class =
+      if index == model.current_char
+        then currentChar
+        else style []
+  in
+    span [ char_class ] [ text (String.fromChar char) ]  
+
 
 stringInput : WordState -> Html
 stringInput model =
   input
-    [ placeholder "Text to reverse"
-    , value model.typed
+    [ placeholder ""
+    , value <| String.fromList model.typed
     , on "input" targetValue sendInput
     , myStyle
     ]
     []
 
 
-
 sendInput: String -> Message
 sendInput str =
-  { sample = model.sample, typed = str } |> Signal.message actions.address 
+  { sample = model.sample, typed = String.toList str, current_char = model.current_char } |> Signal.message actions.address 
+
+
+-- STYLES
 
 myStyle : Attribute
 myStyle =
@@ -55,11 +84,20 @@ myStyle =
     , ("text-align", "center")
     ]
 
+
+currentChar : Attribute
+currentChar = 
+  style
+  [ ("border-bottom", "4px solid #f78d1d")
+  ]
+
+
 -- SIGNALS
 
 actions : Signal.Mailbox WordState
 actions =
-  Signal.mailbox { sample = "rake db:migragte", typed = "" }
+  Signal.mailbox { sample = String.toList "rake db:migragte", typed = [], current_char = model.current_char + 1 }
+
 
 main : Signal Html
 main =
