@@ -12,11 +12,16 @@ Elm.DevType.make = function (_elm) {
    $Basics = Elm.Basics.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
-   $StartApp$Simple = Elm.StartApp.Simple.make(_elm);
+   $StartApp$Simple = Elm.StartApp.Simple.make(_elm),
+   $String = Elm.String.make(_elm);
+   var currentChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                          ,_0: "border-bottom"
+                                                          ,_1: "4px solid #f78d1d"}]));
    var myStyle = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
                                                       ,_0: "width"
                                                       ,_1: "100%"}
@@ -32,33 +37,75 @@ Elm.DevType.make = function (_elm) {
                                                      ,{ctor: "_Tuple2"
                                                       ,_0: "text-align"
                                                       ,_1: "center"}]));
+   var sample_char = F3(function (index,
+   current_char,
+   $char) {
+      return function () {
+         var char_class = _U.eq(index,
+         current_char) ? currentChar : $Html$Attributes.style(_L.fromArray([]));
+         return A2($Html.span,
+         _L.fromArray([char_class]),
+         _L.fromArray([$Html.text($String.fromChar($char))]));
+      }();
+   });
+   var sample_word = function (m) {
+      return A2($Html.div,
+      _L.fromArray([myStyle]),
+      A4($List.map3,
+      sample_char,
+      _L.range(0,
+      $List.length(m.sample) - 1),
+      A2($List.repeat,
+      $List.length(m.sample),
+      m.current_char),
+      m.sample));
+   };
+   var test2 = function (m) {
+      return sample_word(m);
+   };
+   var test = F2(function (address,
+   str) {
+      return A2($Signal.message,
+      address,
+      str);
+   });
    var view = F2(function (address,
-   string) {
+   model) {
       return A2($Html.div,
       _L.fromArray([]),
-      _L.fromArray([A2($Html.div,
-                   _L.fromArray([myStyle]),
-                   _L.fromArray([$Html.text($Basics.toString(string.word))]))
+      _L.fromArray([sample_word(model)
                    ,A2($Html.input,
-                   _L.fromArray([$Html$Attributes.placeholder("Text to reverse")
-                                ,$Html$Attributes.value($Basics.toString(string.word))
+                   _L.fromArray([$Html$Attributes.placeholder("")
+                                ,$Html$Attributes.value($String.fromList(model.typed))
+                                ,A3($Html$Events.on,
+                                "input",
+                                $Html$Events.targetValue,
+                                test(address))
                                 ,myStyle]),
                    _L.fromArray([]))
                    ,A2($Html.div,
-                   _L.fromArray([myStyle]),
-                   _L.fromArray([$Html.text($Basics.toString(string.word))]))]));
+                   _L.fromArray([]),
+                   _L.fromArray([$Html.text($Basics.toString(model.current_char))]))]));
    });
-   var update = F2(function (newStr,
-   oldStr) {
-      return newStr;
+   var update = F2(function (string,
+   oldModel) {
+      return {_: {}
+             ,current_char: oldModel.current_char + 1
+             ,sample: oldModel.sample
+             ,typed: $String.toList(string)};
    });
-   var initialState = {_: {}
-                      ,word: "rake db:migragte"};
    var model = {_: {}
-               ,word: "rake db:migragte"};
-   var WordState = function (a) {
-      return {_: {},word: a};
-   };
+               ,current_char: 0
+               ,sample: $String.toList("rake db:migragte")
+               ,typed: _L.fromArray([])};
+   var WordState = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,current_char: c
+             ,sample: a
+             ,typed: b};
+   });
    var main = $StartApp$Simple.start({_: {}
                                      ,model: model
                                      ,update: update
@@ -67,9 +114,13 @@ Elm.DevType.make = function (_elm) {
                          ,main: main
                          ,WordState: WordState
                          ,model: model
-                         ,initialState: initialState
                          ,update: update
                          ,view: view
-                         ,myStyle: myStyle};
+                         ,test: test
+                         ,test2: test2
+                         ,sample_word: sample_word
+                         ,sample_char: sample_char
+                         ,myStyle: myStyle
+                         ,currentChar: currentChar};
    return _elm.DevType.values;
 };

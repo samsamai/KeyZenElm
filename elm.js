@@ -811,6 +811,132 @@ Elm.Debug.make = function (_elm) {
                        ,trace: trace};
    return _elm.Debug.values;
 };
+Elm.DevType = Elm.DevType || {};
+Elm.DevType.make = function (_elm) {
+   "use strict";
+   _elm.DevType = _elm.DevType || {};
+   if (_elm.DevType.values)
+   return _elm.DevType.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "DevType",
+   $Basics = Elm.Basics.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $StartApp$Simple = Elm.StartApp.Simple.make(_elm),
+   $String = Elm.String.make(_elm);
+   var currentChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                          ,_0: "border-bottom"
+                                                          ,_1: "4px solid #f78d1d"}]));
+   var myStyle = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                      ,_0: "width"
+                                                      ,_1: "100%"}
+                                                     ,{ctor: "_Tuple2"
+                                                      ,_0: "height"
+                                                      ,_1: "40px"}
+                                                     ,{ctor: "_Tuple2"
+                                                      ,_0: "padding"
+                                                      ,_1: "10px 0"}
+                                                     ,{ctor: "_Tuple2"
+                                                      ,_0: "font-size"
+                                                      ,_1: "2em"}
+                                                     ,{ctor: "_Tuple2"
+                                                      ,_0: "text-align"
+                                                      ,_1: "center"}]));
+   var sample_char = F3(function (index,
+   current_char,
+   $char) {
+      return function () {
+         var char_class = _U.eq(index,
+         current_char) ? currentChar : $Html$Attributes.style(_L.fromArray([]));
+         return A2($Html.span,
+         _L.fromArray([char_class]),
+         _L.fromArray([$Html.text($String.fromChar($char))]));
+      }();
+   });
+   var sample_word = function (m) {
+      return A2($Html.div,
+      _L.fromArray([myStyle]),
+      A4($List.map3,
+      sample_char,
+      _L.range(0,
+      $List.length(m.sample) - 1),
+      A2($List.repeat,
+      $List.length(m.sample),
+      m.current_char),
+      m.sample));
+   };
+   var test2 = function (m) {
+      return sample_word(m);
+   };
+   var test = F2(function (address,
+   str) {
+      return A2($Signal.message,
+      address,
+      str);
+   });
+   var view = F2(function (address,
+   model) {
+      return A2($Html.div,
+      _L.fromArray([]),
+      _L.fromArray([sample_word(model)
+                   ,A2($Html.input,
+                   _L.fromArray([$Html$Attributes.placeholder("")
+                                ,$Html$Attributes.value($String.fromList(model.typed))
+                                ,A3($Html$Events.on,
+                                "input",
+                                $Html$Events.targetValue,
+                                test(address))
+                                ,myStyle]),
+                   _L.fromArray([]))
+                   ,A2($Html.div,
+                   _L.fromArray([]),
+                   _L.fromArray([$Html.text($Basics.toString(model.current_char))]))]));
+   });
+   var update = F2(function (string,
+   oldModel) {
+      return {_: {}
+             ,current_char: oldModel.current_char + 1
+             ,sample: oldModel.sample
+             ,typed: $String.toList(string)};
+   });
+   var model = {_: {}
+               ,current_char: 0
+               ,sample: $String.toList("rake db:migragte")
+               ,typed: _L.fromArray([])};
+   var WordState = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,current_char: c
+             ,sample: a
+             ,typed: b};
+   });
+   var main = $StartApp$Simple.start({_: {}
+                                     ,model: model
+                                     ,update: update
+                                     ,view: view});
+   _elm.DevType.values = {_op: _op
+                         ,main: main
+                         ,WordState: WordState
+                         ,model: model
+                         ,update: update
+                         ,view: view
+                         ,test: test
+                         ,test2: test2
+                         ,sample_word: sample_word
+                         ,sample_char: sample_char
+                         ,myStyle: myStyle
+                         ,currentChar: currentChar};
+   return _elm.DevType.values;
+};
 Elm.Dict = Elm.Dict || {};
 Elm.Dict.make = function (_elm) {
    "use strict";
@@ -2688,37 +2814,6 @@ Elm.Graphics.Element.make = function (_elm) {
                                   ,Position: Position};
    return _elm.Graphics.Element.values;
 };
-Elm.Graphics = Elm.Graphics || {};
-Elm.Graphics.Input = Elm.Graphics.Input || {};
-Elm.Graphics.Input.make = function (_elm) {
-   "use strict";
-   _elm.Graphics = _elm.Graphics || {};
-   _elm.Graphics.Input = _elm.Graphics.Input || {};
-   if (_elm.Graphics.Input.values)
-   return _elm.Graphics.Input.values;
-   var _op = {},
-   _N = Elm.Native,
-   _U = _N.Utils.make(_elm),
-   _L = _N.List.make(_elm),
-   $moduleName = "Graphics.Input",
-   $Graphics$Element = Elm.Graphics.Element.make(_elm),
-   $Native$Graphics$Input = Elm.Native.Graphics.Input.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var clickable = $Native$Graphics$Input.clickable;
-   var hoverable = $Native$Graphics$Input.hoverable;
-   var dropDown = $Native$Graphics$Input.dropDown;
-   var checkbox = $Native$Graphics$Input.checkbox;
-   var customButton = $Native$Graphics$Input.customButton;
-   var button = $Native$Graphics$Input.button;
-   _elm.Graphics.Input.values = {_op: _op
-                                ,button: button
-                                ,customButton: customButton
-                                ,checkbox: checkbox
-                                ,dropDown: dropDown
-                                ,hoverable: hoverable
-                                ,clickable: clickable};
-   return _elm.Graphics.Input.values;
-};
 Elm.Html = Elm.Html || {};
 Elm.Html.make = function (_elm) {
    "use strict";
@@ -3829,120 +3924,6 @@ Elm.Json.Encode.make = function (_elm) {
                              ,object: object
                              ,Value: Value};
    return _elm.Json.Encode.values;
-};
-Elm.KeyElm = Elm.KeyElm || {};
-Elm.KeyElm.make = function (_elm) {
-   "use strict";
-   _elm.KeyElm = _elm.KeyElm || {};
-   if (_elm.KeyElm.values)
-   return _elm.KeyElm.values;
-   var _op = {},
-   _N = Elm.Native,
-   _U = _N.Utils.make(_elm),
-   _L = _N.List.make(_elm),
-   $moduleName = "KeyElm",
-   $Basics = Elm.Basics.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $Html$Events = Elm.Html.Events.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $String = Elm.String.make(_elm);
-   var currentChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
-                                                          ,_0: "border-bottom"
-                                                          ,_1: "4px solid #f78d1d"}]));
-   var myStyle = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
-                                                      ,_0: "width"
-                                                      ,_1: "100%"}
-                                                     ,{ctor: "_Tuple2"
-                                                      ,_0: "height"
-                                                      ,_1: "40px"}
-                                                     ,{ctor: "_Tuple2"
-                                                      ,_0: "padding"
-                                                      ,_1: "10px 0"}
-                                                     ,{ctor: "_Tuple2"
-                                                      ,_0: "font-size"
-                                                      ,_1: "2em"}
-                                                     ,{ctor: "_Tuple2"
-                                                      ,_0: "text-align"
-                                                      ,_1: "center"}]));
-   var model = {_: {}
-               ,current_char: 0
-               ,sample: $String.toList("rake db:migragte")
-               ,typed: _L.fromArray([])};
-   var sample_char = F2(function (index,
-   $char) {
-      return function () {
-         var char_class = _U.eq(index,
-         model.current_char) ? currentChar : $Html$Attributes.style(_L.fromArray([]));
-         return A2($Html.span,
-         _L.fromArray([char_class]),
-         _L.fromArray([$Html.text($String.fromChar($char))]));
-      }();
-   });
-   var sample_word = function (char_list) {
-      return A2($Html.div,
-      _L.fromArray([myStyle]),
-      A2($List.indexedMap,
-      sample_char,
-      char_list));
-   };
-   var actions = $Signal.mailbox({_: {}
-                                 ,current_char: model.current_char + 1
-                                 ,sample: $String.toList("rake db:migragte")
-                                 ,typed: _L.fromArray([])});
-   var sendInput = function (str) {
-      return $Signal.message(actions.address)({_: {}
-                                              ,current_char: model.current_char
-                                              ,sample: model.sample
-                                              ,typed: $String.toList(str)});
-   };
-   var stringInput = function (model) {
-      return A2($Html.input,
-      _L.fromArray([$Html$Attributes.placeholder("")
-                   ,$Html$Attributes.value($String.fromList(model.typed))
-                   ,A3($Html$Events.on,
-                   "input",
-                   $Html$Events.targetValue,
-                   sendInput)
-                   ,myStyle]),
-      _L.fromArray([]));
-   };
-   var view = function (model) {
-      return A2($Html.div,
-      _L.fromArray([]),
-      _L.fromArray([stringInput(model)
-                   ,sample_word(model.sample)
-                   ,A2($Html.div,
-                   _L.fromArray([]),
-                   _L.fromArray([$Html.text($Basics.toString(model.current_char))]))]));
-   };
-   var main = A2($Signal.map,
-   view,
-   actions.signal);
-   var WordState = F3(function (a,
-   b,
-   c) {
-      return {_: {}
-             ,current_char: c
-             ,sample: a
-             ,typed: b};
-   });
-   _elm.KeyElm.values = {_op: _op
-                        ,WordState: WordState
-                        ,model: model
-                        ,view: view
-                        ,sample_word: sample_word
-                        ,sample_char: sample_char
-                        ,stringInput: stringInput
-                        ,sendInput: sendInput
-                        ,myStyle: myStyle
-                        ,currentChar: currentChar
-                        ,actions: actions
-                        ,main: main};
-   return _elm.KeyElm.values;
 };
 Elm.List = Elm.List || {};
 Elm.List.make = function (_elm) {
@@ -6994,479 +6975,6 @@ Elm.Native.Graphics.Element.make = function(localRuntime) {
 
 		block: block,
 		markdown: markdown
-	};
-
-};
-
-// setup
-Elm.Native = Elm.Native || {};
-Elm.Native.Graphics = Elm.Native.Graphics || {};
-Elm.Native.Graphics.Input = Elm.Native.Graphics.Input || {};
-
-// definition
-Elm.Native.Graphics.Input.make = function(localRuntime) {
-	'use strict';
-
-	// attempt to short-circuit
-	if ('values' in Elm.Native.Graphics.Input) {
-		return Elm.Native.Graphics.Input.values;
-	}
-
-	var Color = Elm.Native.Color.make(localRuntime);
-	var List = Elm.Native.List.make(localRuntime);
-	var Signal = Elm.Native.Signal.make(localRuntime);
-	var Text = Elm.Native.Text.make(localRuntime);
-	var Utils = Elm.Native.Utils.make(localRuntime);
-
-	var Element = Elm.Native.Graphics.Element.make(localRuntime);
-
-
-	function renderDropDown(model)
-	{
-		var drop = Element.createNode('select');
-		drop.style.border = '0 solid';
-		drop.style.pointerEvents = 'auto';
-		drop.style.display = 'block';
-
-		drop.elm_values = List.toArray(model.values);
-		drop.elm_handler = model.handler;
-		var values = drop.elm_values;
-
-		for (var i = 0; i < values.length; ++i)
-		{
-			var option = Element.createNode('option');
-			var name = values[i]._0;
-			option.value = name;
-			option.innerHTML = name;
-			drop.appendChild(option);
-		}
-		drop.addEventListener('change', function() {
-			Signal.sendMessage(drop.elm_handler(drop.elm_values[drop.selectedIndex]._1));
-		});
-
-		return drop;
-	}
-
-	function updateDropDown(node, oldModel, newModel)
-	{
-		node.elm_values = List.toArray(newModel.values);
-		node.elm_handler = newModel.handler;
-
-		var values = node.elm_values;
-		var kids = node.childNodes;
-		var kidsLength = kids.length;
-
-		var i = 0;
-		for (; i < kidsLength && i < values.length; ++i)
-		{
-			var option = kids[i];
-			var name = values[i]._0;
-			option.value = name;
-			option.innerHTML = name;
-		}
-		for (; i < kidsLength; ++i)
-		{
-			node.removeChild(node.lastChild);
-		}
-		for (; i < values.length; ++i)
-		{
-			var option = Element.createNode('option');
-			var name = values[i]._0;
-			option.value = name;
-			option.innerHTML = name;
-			node.appendChild(option);
-		}
-		return node;
-	}
-
-	function dropDown(handler, values)
-	{
-		return A3(Element.newElement, 100, 24, {
-			ctor: 'Custom',
-			type: 'DropDown',
-			render: renderDropDown,
-			update: updateDropDown,
-			model: {
-				values: values,
-				handler: handler
-			}
-		});
-	}
-
-	function renderButton(model)
-	{
-		var node = Element.createNode('button');
-		node.style.display = 'block';
-		node.style.pointerEvents = 'auto';
-		node.elm_message = model.message;
-		function click()
-		{
-			Signal.sendMessage(node.elm_message);
-		}
-		node.addEventListener('click', click);
-		node.innerHTML = model.text;
-		return node;
-	}
-
-	function updateButton(node, oldModel, newModel)
-	{
-		node.elm_message = newModel.message;
-		var txt = newModel.text;
-		if (oldModel.text !== txt)
-		{
-			node.innerHTML = txt;
-		}
-		return node;
-	}
-
-	function button(message, text)
-	{
-		return A3(Element.newElement, 100, 40, {
-			ctor: 'Custom',
-			type: 'Button',
-			render: renderButton,
-			update: updateButton,
-			model: {
-				message: message,
-				text:text
-			}
-		});
-	}
-
-	function renderCustomButton(model)
-	{
-		var btn = Element.createNode('div');
-		btn.style.pointerEvents = 'auto';
-		btn.elm_message = model.message;
-
-		btn.elm_up    = Element.render(model.up);
-		btn.elm_hover = Element.render(model.hover);
-		btn.elm_down  = Element.render(model.down);
-
-		btn.elm_up.style.display = 'block';
-		btn.elm_hover.style.display = 'none';
-		btn.elm_down.style.display = 'none';
-
-		btn.appendChild(btn.elm_up);
-		btn.appendChild(btn.elm_hover);
-		btn.appendChild(btn.elm_down);
-
-		function swap(visibleNode, hiddenNode1, hiddenNode2)
-		{
-			visibleNode.style.display = 'block';
-			hiddenNode1.style.display = 'none';
-			hiddenNode2.style.display = 'none';
-		}
-
-		var overCount = 0;
-		function over(e)
-		{
-			if (overCount++ > 0) return;
-			swap(btn.elm_hover, btn.elm_down, btn.elm_up);
-		}
-		function out(e)
-		{
-			if (btn.contains(e.toElement || e.relatedTarget)) return;
-			overCount = 0;
-			swap(btn.elm_up, btn.elm_down, btn.elm_hover);
-		}
-		function up()
-		{
-			swap(btn.elm_hover, btn.elm_down, btn.elm_up);
-			Signal.sendMessage(btn.elm_message);
-		}
-		function down()
-		{
-			swap(btn.elm_down, btn.elm_hover, btn.elm_up);
-		}
-
-		btn.addEventListener('mouseover', over);
-		btn.addEventListener('mouseout' , out);
-		btn.addEventListener('mousedown', down);
-		btn.addEventListener('mouseup'  , up);
-
-		return btn;
-	}
-
-	function updateCustomButton(node, oldModel, newModel)
-	{
-		node.elm_message = newModel.message;
-
-		var kids = node.childNodes;
-		var styleUp    = kids[0].style.display;
-		var styleHover = kids[1].style.display;
-		var styleDown  = kids[2].style.display;
-
-		Element.updateAndReplace(kids[0], oldModel.up, newModel.up);
-		Element.updateAndReplace(kids[1], oldModel.hover, newModel.hover);
-		Element.updateAndReplace(kids[2], oldModel.down, newModel.down);
-
-		var kids = node.childNodes;
-		kids[0].style.display = styleUp;
-		kids[1].style.display = styleHover;
-		kids[2].style.display = styleDown;
-
-		return node;
-	}
-
-	function max3(a,b,c)
-	{
-		var ab = a > b ? a : b;
-		return ab > c ? ab : c;
-	}
-
-	function customButton(message, up, hover, down)
-	{
-		return A3(Element.newElement,
-				  max3(up.props.width, hover.props.width, down.props.width),
-				  max3(up.props.height, hover.props.height, down.props.height),
-				  { ctor: 'Custom',
-					type: 'CustomButton',
-					render: renderCustomButton,
-					update: updateCustomButton,
-					model: {
-						message: message,
-						up: up,
-						hover: hover,
-						down: down
-					}
-				  });
-	}
-
-	function renderCheckbox(model)
-	{
-		var node = Element.createNode('input');
-		node.type = 'checkbox';
-		node.checked = model.checked;
-		node.style.display = 'block';
-		node.style.pointerEvents = 'auto';
-		node.elm_handler = model.handler;
-		function change()
-		{
-			Signal.sendMessage(node.elm_handler(node.checked));
-		}
-		node.addEventListener('change', change);
-		return node;
-	}
-
-	function updateCheckbox(node, oldModel, newModel)
-	{
-		node.elm_handler = newModel.handler;
-		node.checked = newModel.checked;
-		return node;
-	}
-
-	function checkbox(handler, checked)
-	{
-		return A3(Element.newElement, 13, 13, {
-			ctor: 'Custom',
-			type: 'CheckBox',
-			render: renderCheckbox,
-			update: updateCheckbox,
-			model: { handler:handler, checked:checked }
-		});
-	}
-
-	function setRange(node, start, end, dir)
-	{
-		if (node.parentNode)
-		{
-			node.setSelectionRange(start, end, dir);
-		}
-		else
-		{
-			setTimeout(function(){node.setSelectionRange(start, end, dir);}, 0);
-		}
-	}
-
-	function updateIfNeeded(css, attribute, latestAttribute)
-	{
-		if (css[attribute] !== latestAttribute)
-		{
-			css[attribute] = latestAttribute;
-		}
-	}
-	function cssDimensions(dimensions)
-	{
-		return dimensions.top    + 'px ' +
-			   dimensions.right  + 'px ' +
-			   dimensions.bottom + 'px ' +
-			   dimensions.left   + 'px';
-	}
-	function updateFieldStyle(css, style)
-	{
-		updateIfNeeded(css, 'padding', cssDimensions(style.padding));
-
-		var outline = style.outline;
-		updateIfNeeded(css, 'border-width', cssDimensions(outline.width));
-		updateIfNeeded(css, 'border-color', Color.toCss(outline.color));
-		updateIfNeeded(css, 'border-radius', outline.radius + 'px');
-
-		var highlight = style.highlight;
-		if (highlight.width === 0)
-		{
-			css.outline = 'none';
-		}
-		else
-		{
-			updateIfNeeded(css, 'outline-width', highlight.width + 'px');
-			updateIfNeeded(css, 'outline-color', Color.toCss(highlight.color));
-		}
-
-		var textStyle = style.style;
-		updateIfNeeded(css, 'color', Color.toCss(textStyle.color));
-		if (textStyle.typeface.ctor !== '[]')
-		{
-			updateIfNeeded(css, 'font-family', Text.toTypefaces(textStyle.typeface));
-		}
-		if (textStyle.height.ctor !== "Nothing")
-		{
-			updateIfNeeded(css, 'font-size', textStyle.height._0 + 'px');
-		}
-		updateIfNeeded(css, 'font-weight', textStyle.bold ? 'bold' : 'normal');
-		updateIfNeeded(css, 'font-style', textStyle.italic ? 'italic' : 'normal');
-		if (textStyle.line.ctor !== 'Nothing')
-		{
-			updateIfNeeded(css, 'text-decoration', Text.toLine(textStyle.line._0));
-		}
-	}
-
-	function renderField(model)
-	{
-		var field = Element.createNode('input');
-		updateFieldStyle(field.style, model.style);
-		field.style.borderStyle = 'solid';
-		field.style.pointerEvents = 'auto';
-
-		field.type = model.type;
-		field.placeholder = model.placeHolder;
-		field.value = model.content.string;
-
-		field.elm_handler = model.handler;
-		field.elm_old_value = field.value;
-
-		function inputUpdate(event)
-		{
-			var curr = field.elm_old_value;
-			var next = field.value;
-			if (curr === next)
-			{
-				return;
-			}
-
-			var direction = field.selectionDirection === 'forward' ? 'Forward' : 'Backward';
-			var start = field.selectionStart;
-			var end = field.selectionEnd;
-			field.value = field.elm_old_value;
-
-			Signal.sendMessage(field.elm_handler({
-				_:{},
-				string: next,
-				selection: {
-					_:{},
-					start: start,
-					end: end,
-					direction: { ctor: direction }
-				}
-			}));
-		}
-
-		field.addEventListener('input', inputUpdate);
-		field.addEventListener('focus', function() {
-			field.elm_hasFocus = true;
-		});
-		field.addEventListener('blur', function() {
-			field.elm_hasFocus = false;
-		});
-
-		return field;
-	}
-
-	function updateField(field, oldModel, newModel)
-	{
-		if (oldModel.style !== newModel.style)
-		{
-			updateFieldStyle(field.style, newModel.style);
-		}
-		field.elm_handler = newModel.handler;
-
-		field.type = newModel.type;
-		field.placeholder = newModel.placeHolder;
-		var value = newModel.content.string;
-		field.value = value;
-		field.elm_old_value = value;
-		if (field.elm_hasFocus)
-		{
-			var selection = newModel.content.selection;
-			var direction = selection.direction.ctor === 'Forward' ? 'forward' : 'backward';
-			setRange(field, selection.start, selection.end, direction);
-		}
-		return field;
-	}
-
-	function mkField(type)
-	{
-		function field(style, handler, placeHolder, content)
-		{
-			var padding = style.padding;
-			var outline = style.outline.width;
-			var adjustWidth = padding.left + padding.right + outline.left + outline.right;
-			var adjustHeight = padding.top + padding.bottom + outline.top + outline.bottom;
-			return A3(Element.newElement, 200, 30, {
-				ctor: 'Custom',
-				type: type + 'Field',
-				adjustWidth: adjustWidth,
-				adjustHeight: adjustHeight,
-				render: renderField,
-				update: updateField,
-				model: {
-					handler:handler,
-					placeHolder:placeHolder,
-					content:content,
-					style:style,
-					type:type
-				}
-			});
-		}
-		return F4(field);
-	}
-
-	function hoverable(handler, elem)
-	{
-		function onHover(bool)
-		{
-			Signal.sendMessage(handler(bool));
-		}
-		var props = Utils.replace([['hover',onHover]], elem.props);
-		return {
-			props: props,
-			element: elem.element
-		};
-	}
-
-	function clickable(message, elem)
-	{
-		function onClick()
-		{
-			Signal.sendMessage(message);
-		}
-		var props = Utils.replace([['click',onClick]], elem.props);
-		return {
-			props: props,
-			element: elem.element
-		};
-	}
-
-	return Elm.Native.Graphics.Input.values = {
-		button: F2(button),
-		customButton: F4(customButton),
-		checkbox: F2(checkbox),
-		dropDown: F2(dropDown),
-		field: mkField('text'),
-		email: mkField('email'),
-		password: mkField('password'),
-		hoverable: F2(hoverable),
-		clickable: F2(clickable)
 	};
 
 };
@@ -12935,6 +12443,68 @@ Elm.Signal.make = function (_elm) {
                         ,forwardTo: forwardTo
                         ,Mailbox: Mailbox};
    return _elm.Signal.values;
+};
+Elm.StartApp = Elm.StartApp || {};
+Elm.StartApp.Simple = Elm.StartApp.Simple || {};
+Elm.StartApp.Simple.make = function (_elm) {
+   "use strict";
+   _elm.StartApp = _elm.StartApp || {};
+   _elm.StartApp.Simple = _elm.StartApp.Simple || {};
+   if (_elm.StartApp.Simple.values)
+   return _elm.StartApp.Simple.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "StartApp.Simple",
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var start = function (config) {
+      return function () {
+         var update = F2(function (maybeAction,
+         model) {
+            return function () {
+               switch (maybeAction.ctor)
+               {case "Just":
+                  return A2(config.update,
+                    maybeAction._0,
+                    model);
+                  case "Nothing":
+                  return $Debug.crash("This should never happen.");}
+               _U.badCase($moduleName,
+               "between lines 91 and 98");
+            }();
+         });
+         var actions = $Signal.mailbox($Maybe.Nothing);
+         var address = A2($Signal.forwardTo,
+         actions.address,
+         $Maybe.Just);
+         var model = A3($Signal.foldp,
+         update,
+         config.model,
+         actions.signal);
+         return A2($Signal.map,
+         config.view(address),
+         model);
+      }();
+   };
+   var Config = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,model: a
+             ,update: c
+             ,view: b};
+   });
+   _elm.StartApp.Simple.values = {_op: _op
+                                 ,Config: Config
+                                 ,start: start};
+   return _elm.StartApp.Simple.values;
 };
 Elm.String = Elm.String || {};
 Elm.String.make = function (_elm) {
