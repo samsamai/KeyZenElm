@@ -853,6 +853,9 @@ Elm.DevType.make = function (_elm) {
                                                    ,_0: "color"
                                                    ,_1: "#AAA"}
                                                   ,{ctor: "_Tuple2"
+                                                   ,_0: "font-size"
+                                                   ,_1: "28px"}
+                                                  ,{ctor: "_Tuple2"
                                                    ,_0: "width"
                                                    ,_1: "100%"}
                                                   ,{ctor: "_Tuple2"
@@ -873,12 +876,33 @@ Elm.DevType.make = function (_elm) {
                                                   ,{ctor: "_Tuple2"
                                                    ,_0: "text-shadow"
                                                    ,_1: "0px 2px 3px #000"}]));
+   var input_style = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                          ,_0: "width"
+                                                          ,_1: "100%"}
+                                                         ,{ctor: "_Tuple2"
+                                                          ,_0: "height"
+                                                          ,_1: "68px"}
+                                                         ,{ctor: "_Tuple2"
+                                                          ,_0: "padding"
+                                                          ,_1: "10px 0"}
+                                                         ,{ctor: "_Tuple2"
+                                                          ,_0: "font-size"
+                                                          ,_1: "2em"}
+                                                         ,{ctor: "_Tuple2"
+                                                          ,_0: "text-align"
+                                                          ,_1: "center"}
+                                                         ,{ctor: "_Tuple2"
+                                                          ,_0: "background"
+                                                          ,_1: "transparent"}
+                                                         ,{ctor: "_Tuple2"
+                                                          ,_0: "border"
+                                                          ,_1: "none"}]));
    var myStyle = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
                                                       ,_0: "width"
                                                       ,_1: "100%"}
                                                      ,{ctor: "_Tuple2"
                                                       ,_0: "height"
-                                                      ,_1: "40px"}
+                                                      ,_1: "68px"}
                                                      ,{ctor: "_Tuple2"
                                                       ,_0: "padding"
                                                       ,_1: "10px 0"}
@@ -888,6 +912,24 @@ Elm.DevType.make = function (_elm) {
                                                      ,{ctor: "_Tuple2"
                                                       ,_0: "text-align"
                                                       ,_1: "center"}]));
+   var body = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                   ,_0: "background-image"
+                                                   ,_1: "url(\'brushed_alu.png\')"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "font-family"
+                                                   ,_1: "\'Ubuntu Monokz\', sans-serif"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "padding"
+                                                   ,_1: "0"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "margin"
+                                                   ,_1: "0"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "min-height"
+                                                   ,_1: "100%"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "outline"
+                                                   ,_1: "none"}]));
    var sample_char = F2(function (index,
    model) {
       return function () {
@@ -935,6 +977,8 @@ Elm.DevType.make = function (_elm) {
    var view = F2(function (address,
    model) {
       return A2($Html.div,
+      _L.fromArray([body]),
+      _L.fromArray([A2($Html.div,
       _L.fromArray([word]),
       _L.fromArray([sample_word(model)
                    ,A2($Html.input,
@@ -944,11 +988,11 @@ Elm.DevType.make = function (_elm) {
                                 "input",
                                 $Html$Events.targetValue,
                                 A2(makeMessage,address,model))
-                                ,myStyle]),
+                                ,input_style]),
                    _L.fromArray([]))
                    ,A2($Html.div,
                    _L.fromArray([]),
-                   _L.fromArray([$Html.text($Basics.toString(model.current_char))]))]));
+                   _L.fromArray([$Html.text($Basics.toString(model.current_char))]))]))]));
    });
    var update = F2(function (new_model,
    old_model) {
@@ -979,7 +1023,9 @@ Elm.DevType.make = function (_elm) {
                          ,makeMessage: makeMessage
                          ,sample_word: sample_word
                          ,sample_char: sample_char
+                         ,body: body
                          ,myStyle: myStyle
+                         ,input_style: input_style
                          ,word: word
                          ,normalChar: normalChar
                          ,currentChar: currentChar

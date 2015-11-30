@@ -31,17 +31,20 @@ update new_model old_model =
 
 view : Address WordState -> WordState -> Html
 view address model =
-  div [word]
+  div [body]
     [
-    sample_word model
-    , input
-      [ placeholder ""
-      , value <| String.fromList <| Array.toList model.typed
-      , on "input" targetValue (makeMessage address model)
-      , myStyle
-      ]
-      []
-    , div [] [ text <| toString model.current_char ]
+      div [word]
+        [
+        sample_word model
+        , input
+          [ placeholder ""
+          , value <| String.fromList <| Array.toList model.typed
+          , on "input" targetValue (makeMessage address model)
+          , input_style
+          ]
+          []
+        , div [] [ text <| toString model.current_char ]
+        ]
     ]
 
 makeMessage : Address WordState -> WordState -> String -> Signal.Message
@@ -52,19 +55,8 @@ makeMessage address model str =
 sample_word: WordState -> Html
 sample_word m =
   div [ myStyle ]
-  --(List.map4 sample_char [ 0 .. (List.length m.sample) - 1 ] (List.repeat (List.length m.sample) m.current_char ) m.sample m.sample)
-  --( Array.foldr (\x acc -> (sample_char x m) :: acc) [] Array.fromList([ 0 .. (Array.length m.sample) - 1 ]) )
   ( Array.foldr (\x acc -> (sample_char x m) :: acc) [] (Array.fromList[ 0 .. (Array.length m.sample) - 1 ]) )
 
---sample_char2 model index
---  let
---    char_class =
---      if index == current_char
---        then currentChar
---      else if model.sample[index] == model.typed[index]
---        then goodChar
---      else errorChar
---  in
 
 sample_char: Int -> WordState -> Html
 sample_char index model = 
@@ -86,14 +78,39 @@ sample_char index model =
               |> String.fromChar 
               |> text ]  
 
+body : Attribute
+body = 
+  style
+  [
+    ("background-image", "url('brushed_alu.png')"),
+    ("font-family", "'Ubuntu Monokz', sans-serif"),
+    ("padding", "0"),
+    ("margin", "0"),
+    ("min-height", "100%"),
+    ("outline", "none")
+  ]
+
+
 myStyle : Attribute
 myStyle =
   style
     [ ("width", "100%")
-    , ("height", "40px")
+    , ("height", "68px")
     , ("padding", "10px 0")
     , ("font-size", "2em")
     , ("text-align", "center")
+    ]
+
+input_style : Attribute
+input_style =
+  style
+    [ ("width", "100%")
+    , ("height", "68px")
+    , ("padding", "10px 0")
+    , ("font-size", "2em")
+    , ("text-align", "center")
+    , ("background", "transparent")
+    , ("border", "none")
     ]
 
 word : Attribute
@@ -104,8 +121,7 @@ word =
     --("position", "absolute"),
     --("top", "50%"),
     --("margin-top", "-64px"),
-    --("height", "128px"),
-    --("font-size", "128px"),
+    ("font-size", "28px"),
     ("width", "100%"),
     ("padding", "0px"),
     ("text-align", "center"),
