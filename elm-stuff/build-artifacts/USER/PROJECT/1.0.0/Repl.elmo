@@ -9,15 +9,17 @@ Elm.Repl.make = function (_elm) {
    _U = _N.Utils.make(_elm),
    _L = _N.List.make(_elm),
    $moduleName = "Repl",
+   $Array = Elm.Array.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
    var tsol = {ctor: "_Tuple0"};
-   var deltron3030 = A2($List.repeat,
-   4,
-   3);
+   var deltron3030 = $String.fromChar($Maybe.withDefault(_U.chr("x"))($Array.get(1)($Array.fromList(_L.fromArray([_U.chr("3")
+                                                                                                                 ,_U.chr("2")
+                                                                                                                 ,_U.chr("1")])))));
    _elm.Repl.values = {_op: _op
                       ,deltron3030: deltron3030
                       ,tsol: tsol};

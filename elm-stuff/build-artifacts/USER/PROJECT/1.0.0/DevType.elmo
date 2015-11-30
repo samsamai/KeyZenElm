@@ -9,6 +9,7 @@ Elm.DevType.make = function (_elm) {
    _U = _N.Utils.make(_elm),
    _L = _N.List.make(_elm),
    $moduleName = "DevType",
+   $Array = Elm.Array.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
@@ -19,9 +20,46 @@ Elm.DevType.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $StartApp$Simple = Elm.StartApp.Simple.make(_elm),
    $String = Elm.String.make(_elm);
+   var untypedChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                          ,_0: "color"
+                                                          ,_1: "#EEEEEE"}]));
+   var goodChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                       ,_0: "color"
+                                                       ,_1: "#AAAAAA"}
+                                                      ,{ctor: "_Tuple2"
+                                                       ,_0: "text-shadow"
+                                                       ,_1: "0px 1px 1px #FFF, 0px 2px 2px #FFF"}]));
+   var errorChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                        ,_0: "color"
+                                                        ,_1: "#FF0000"}]));
    var currentChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
                                                           ,_0: "border-bottom"
                                                           ,_1: "4px solid #f78d1d"}]));
+   var normalChar = $Html$Attributes.style(_L.fromArray([]));
+   var word = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                   ,_0: "color"
+                                                   ,_1: "#AAA"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "width"
+                                                   ,_1: "100%"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "padding"
+                                                   ,_1: "0px"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "text-align"
+                                                   ,_1: "center"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "margin-left"
+                                                   ,_1: "auto"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "margin-right"
+                                                   ,_1: "auto"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "word-wrap"
+                                                   ,_1: "break-word"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "text-shadow"
+                                                   ,_1: "0px 2px 3px #000"}]));
    var myStyle = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
                                                       ,_0: "width"
                                                       ,_1: "100%"}
@@ -37,67 +75,76 @@ Elm.DevType.make = function (_elm) {
                                                      ,{ctor: "_Tuple2"
                                                       ,_0: "text-align"
                                                       ,_1: "center"}]));
-   var sample_char = F3(function (index,
-   current_char,
-   $char) {
+   var sample_char = F2(function (index,
+   model) {
       return function () {
-         var char_class = _U.eq(index,
-         current_char) ? currentChar : $Html$Attributes.style(_L.fromArray([]));
+         var char_class = _U.cmp(index,
+         model.current_char) > 0 ? normalChar : _U.eq(index,
+         model.current_char) ? currentChar : _U.eq(A2($Array.get,
+         index,
+         model.sample),
+         A2($Array.get,
+         index,
+         model.typed)) ? goodChar : !_U.eq(A2($Array.get,
+         index,
+         model.sample),
+         A2($Array.get,
+         index,
+         model.typed)) ? errorChar : untypedChar;
          return A2($Html.span,
          _L.fromArray([char_class]),
-         _L.fromArray([$Html.text($String.fromChar($char))]));
+         _L.fromArray([$Html.text($String.fromChar($Maybe.withDefault(_U.chr(" "))($Array.get(index)(model.sample))))]));
       }();
    });
    var sample_word = function (m) {
       return A2($Html.div,
       _L.fromArray([myStyle]),
-      A4($List.map3,
-      sample_char,
-      _L.range(0,
-      $List.length(m.sample) - 1),
-      A2($List.repeat,
-      $List.length(m.sample),
-      m.current_char),
-      m.sample));
+      A3($Array.foldr,
+      F2(function (x,acc) {
+         return A2($List._op["::"],
+         A2(sample_char,x,m),
+         acc);
+      }),
+      _L.fromArray([]),
+      $Array.fromList(_L.range(0,
+      $Array.length(m.sample) - 1))));
    };
-   var test2 = function (m) {
-      return sample_word(m);
-   };
-   var test = F2(function (address,
+   var makeMessage = F3(function (address,
+   model,
    str) {
       return A2($Signal.message,
       address,
-      str);
+      {_: {}
+      ,current_char: $String.length(str)
+      ,sample: model.sample
+      ,typed: $Array.fromList($String.toList(str))});
    });
    var view = F2(function (address,
    model) {
       return A2($Html.div,
-      _L.fromArray([]),
+      _L.fromArray([word]),
       _L.fromArray([sample_word(model)
                    ,A2($Html.input,
                    _L.fromArray([$Html$Attributes.placeholder("")
-                                ,$Html$Attributes.value($String.fromList(model.typed))
+                                ,$Html$Attributes.value($String.fromList($Array.toList(model.typed)))
                                 ,A3($Html$Events.on,
                                 "input",
                                 $Html$Events.targetValue,
-                                test(address))
+                                A2(makeMessage,address,model))
                                 ,myStyle]),
                    _L.fromArray([]))
                    ,A2($Html.div,
                    _L.fromArray([]),
                    _L.fromArray([$Html.text($Basics.toString(model.current_char))]))]));
    });
-   var update = F2(function (string,
-   oldModel) {
-      return {_: {}
-             ,current_char: oldModel.current_char + 1
-             ,sample: oldModel.sample
-             ,typed: $String.toList(string)};
+   var update = F2(function (new_model,
+   old_model) {
+      return new_model;
    });
    var model = {_: {}
                ,current_char: 0
-               ,sample: $String.toList("rake db:migragte")
-               ,typed: _L.fromArray([])};
+               ,sample: $Array.fromList($String.toList("rake db:migrate"))
+               ,typed: $Array.fromList(_L.fromArray([]))};
    var WordState = F3(function (a,
    b,
    c) {
@@ -116,11 +163,15 @@ Elm.DevType.make = function (_elm) {
                          ,model: model
                          ,update: update
                          ,view: view
-                         ,test: test
-                         ,test2: test2
+                         ,makeMessage: makeMessage
                          ,sample_word: sample_word
                          ,sample_char: sample_char
                          ,myStyle: myStyle
-                         ,currentChar: currentChar};
+                         ,word: word
+                         ,normalChar: normalChar
+                         ,currentChar: currentChar
+                         ,errorChar: errorChar
+                         ,goodChar: goodChar
+                         ,untypedChar: untypedChar};
    return _elm.DevType.values;
 };
