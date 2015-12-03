@@ -824,6 +824,7 @@ Elm.DevType.make = function (_elm) {
    $moduleName = "DevType",
    $Array = Elm.Array.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $Html$Events = Elm.Html.Events.make(_elm),
@@ -964,15 +965,49 @@ Elm.DevType.make = function (_elm) {
       $Array.fromList(_L.range(0,
       $Array.length(m.sample) - 1))));
    };
+   var update = F2(function (new_model,
+   old_model) {
+      return new_model;
+   });
+   var wordArray = $Array.fromList(_L.fromArray(["rake db:migrate"
+                                                ,"rake db:reset"]));
+   var nextWord = function (current_index) {
+      return function () {
+         var index = current_index;
+         return $Maybe.withDefault("")($Array.get(current_index)(wordArray));
+      }();
+   };
+   var model = {_: {}
+               ,current_char: 0
+               ,current_word: 0
+               ,sample: $Array.fromList($String.toList(nextWord(0)))
+               ,typed: $Array.fromList(_L.fromArray([]))};
    var makeMessage = F3(function (address,
    model,
    str) {
-      return A2($Signal.message,
-      address,
-      {_: {}
-      ,current_char: $String.length(str)
-      ,sample: model.sample
-      ,typed: $Array.fromList($String.toList(str))});
+      return function () {
+         var typed_count = $String.length(str);
+         var new_model = _U.cmp(typed_count,
+         $Array.length(model.sample)) > -1 ? function () {
+            var current_word = _U.cmp(model.current_word + 1,
+            $Array.length(wordArray)) > -1 ? 0 : model.current_word + 1;
+            var a = A2($Debug.watch,
+            "test",
+            current_word);
+            return {_: {}
+                   ,current_char: 0
+                   ,current_word: current_word
+                   ,sample: $Array.fromList($String.toList(nextWord(current_word)))
+                   ,typed: $Array.fromList(_L.fromArray([]))};
+         }() : {_: {}
+               ,current_char: $String.length(str)
+               ,current_word: model.current_word
+               ,sample: model.sample
+               ,typed: $Array.fromList($String.toList(str))};
+         return A2($Signal.message,
+         address,
+         new_model);
+      }();
    });
    var view = F2(function (address,
    model) {
@@ -988,25 +1023,20 @@ Elm.DevType.make = function (_elm) {
                                 "input",
                                 $Html$Events.targetValue,
                                 A2(makeMessage,address,model))
+                                ,$Html$Attributes.autofocus(true)
                                 ,input_style]),
                    _L.fromArray([]))
                    ,A2($Html.div,
                    _L.fromArray([]),
                    _L.fromArray([$Html.text($Basics.toString(model.current_char))]))]))]));
    });
-   var update = F2(function (new_model,
-   old_model) {
-      return new_model;
-   });
-   var model = {_: {}
-               ,current_char: 0
-               ,sample: $Array.fromList($String.toList("rake db:migrate"))
-               ,typed: $Array.fromList(_L.fromArray([]))};
-   var WordState = F3(function (a,
+   var WordState = F4(function (a,
    b,
-   c) {
+   c,
+   d) {
       return {_: {}
              ,current_char: c
+             ,current_word: d
              ,sample: a
              ,typed: b};
    });
@@ -1017,7 +1047,9 @@ Elm.DevType.make = function (_elm) {
    _elm.DevType.values = {_op: _op
                          ,main: main
                          ,WordState: WordState
+                         ,wordArray: wordArray
                          ,model: model
+                         ,nextWord: nextWord
                          ,update: update
                          ,view: view
                          ,makeMessage: makeMessage

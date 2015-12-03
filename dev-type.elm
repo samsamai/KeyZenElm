@@ -9,6 +9,7 @@ import String
 import Html exposing (Html, Attribute, text, toElement, div, input, span)
 import List exposing (..)
 import Array exposing (..)
+import Debug exposing (..)
 
 main =
   StartApp.start { model = model, view = view, update = update }
@@ -16,18 +17,40 @@ main =
 type alias WordState = {
        sample: Array Char,
        typed: Array Char,
-       current_char: Int
+       current_char: Int,
+       current_word: Int
 }
+
+
+wordArray : Array String
+wordArray = 
+  Array.fromList [ "rake db:migrate", "rake db:reset" ]
+
 
 model: WordState
 model = {
-    sample = String.toList "rake db:migrate" |> Array.fromList, 
+    sample = nextWord 0 
+              |> String.toList 
+              |> Array.fromList, 
     typed = Array.fromList [],
-    current_char = 0 }
+    current_char = 0,
+    current_word = 0 }
+
+
+nextWord : Int -> String
+nextWord current_index =
+  let 
+    index = current_index
+  in  
+    wordArray
+    |> Array.get current_index 
+    |> Maybe.withDefault ""
+    
 
 update: WordState -> WordState -> WordState
 update new_model old_model =
   new_model
+
 
 view : Address WordState -> WordState -> Html
 view address model =
@@ -40,6 +63,7 @@ view address model =
           [ placeholder ""
           , value <| String.fromList <| Array.toList model.typed
           , on "input" targetValue (makeMessage address model)
+          , autofocus True
           , input_style
           ]
           []
@@ -47,9 +71,28 @@ view address model =
         ]
     ]
 
+
 makeMessage : Address WordState -> WordState -> String -> Signal.Message
 makeMessage address model str =
-  Signal.message address { sample = model.sample, typed = Array.fromList( String.toList str ), current_char = (String.length  str )}
+  let
+    typed_count = String.length str
+
+    new_model = 
+      if typed_count >= Array.length model.sample
+        then
+          let
+            current_word = 
+              if (model.current_word + 1) >= Array.length wordArray
+                then 0
+              else
+                model.current_word + 1
+            a = Debug.watch "test" current_word
+          in
+            { sample = nextWord current_word |> String.toList |> Array.fromList, typed = Array.fromList [], current_char = 0, current_word = current_word }
+      else
+        { sample = model.sample, typed = Array.fromList( String.toList str ), current_char = (String.length str ), current_word = model.current_word }
+  in
+    Signal.message address new_model
 
 
 sample_word: WordState -> Html
