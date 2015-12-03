@@ -1,0 +1,223 @@
+Elm.DevTypeView = Elm.DevTypeView || {};
+Elm.DevTypeView.make = function (_elm) {
+   "use strict";
+   _elm.DevTypeView = _elm.DevTypeView || {};
+   if (_elm.DevTypeView.values)
+   return _elm.DevTypeView.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "DevTypeView",
+   $Array = Elm.Array.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $DevTypeModel = Elm.DevTypeModel.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var untypedChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                          ,_0: "color"
+                                                          ,_1: "#EEEEEE"}]));
+   var goodChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                       ,_0: "color"
+                                                       ,_1: "#AAAAAA"}
+                                                      ,{ctor: "_Tuple2"
+                                                       ,_0: "text-shadow"
+                                                       ,_1: "0px 1px 1px #FFF, 0px 2px 2px #FFF"}]));
+   var errorChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                        ,_0: "color"
+                                                        ,_1: "#FF0000"}]));
+   var currentChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                          ,_0: "border-bottom"
+                                                          ,_1: "4px solid #f78d1d"}]));
+   var normalChar = $Html$Attributes.style(_L.fromArray([]));
+   var word = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                   ,_0: "color"
+                                                   ,_1: "#AAA"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "font-size"
+                                                   ,_1: "28px"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "width"
+                                                   ,_1: "100%"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "padding"
+                                                   ,_1: "0px"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "text-align"
+                                                   ,_1: "center"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "margin-left"
+                                                   ,_1: "auto"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "margin-right"
+                                                   ,_1: "auto"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "word-wrap"
+                                                   ,_1: "break-word"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "text-shadow"
+                                                   ,_1: "0px 2px 3px #000"}]));
+   var input_style = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                          ,_0: "width"
+                                                          ,_1: "100%"}
+                                                         ,{ctor: "_Tuple2"
+                                                          ,_0: "height"
+                                                          ,_1: "68px"}
+                                                         ,{ctor: "_Tuple2"
+                                                          ,_0: "padding"
+                                                          ,_1: "10px 0"}
+                                                         ,{ctor: "_Tuple2"
+                                                          ,_0: "font-size"
+                                                          ,_1: "2em"}
+                                                         ,{ctor: "_Tuple2"
+                                                          ,_0: "text-align"
+                                                          ,_1: "center"}
+                                                         ,{ctor: "_Tuple2"
+                                                          ,_0: "background"
+                                                          ,_1: "transparent"}
+                                                         ,{ctor: "_Tuple2"
+                                                          ,_0: "border"
+                                                          ,_1: "none"}]));
+   var myStyle = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                      ,_0: "width"
+                                                      ,_1: "100%"}
+                                                     ,{ctor: "_Tuple2"
+                                                      ,_0: "height"
+                                                      ,_1: "68px"}
+                                                     ,{ctor: "_Tuple2"
+                                                      ,_0: "padding"
+                                                      ,_1: "10px 0"}
+                                                     ,{ctor: "_Tuple2"
+                                                      ,_0: "font-size"
+                                                      ,_1: "2em"}
+                                                     ,{ctor: "_Tuple2"
+                                                      ,_0: "text-align"
+                                                      ,_1: "center"}]));
+   var body = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                   ,_0: "background-image"
+                                                   ,_1: "url(\'brushed_alu.png\')"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "font-family"
+                                                   ,_1: "\'Ubuntu Monokz\', sans-serif"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "padding"
+                                                   ,_1: "0"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "margin"
+                                                   ,_1: "0"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "min-height"
+                                                   ,_1: "100%"}
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "outline"
+                                                   ,_1: "none"}]));
+   var sample_char = F2(function (index,
+   model) {
+      return function () {
+         var char_class = _U.cmp(index,
+         model.current_char) > 0 ? normalChar : _U.eq(index,
+         model.current_char) ? currentChar : _U.eq(A2($Array.get,
+         index,
+         model.sample),
+         A2($Array.get,
+         index,
+         model.typed)) ? goodChar : !_U.eq(A2($Array.get,
+         index,
+         model.sample),
+         A2($Array.get,
+         index,
+         model.typed)) ? errorChar : untypedChar;
+         return A2($Html.span,
+         _L.fromArray([char_class]),
+         _L.fromArray([$Html.text($String.fromChar($Maybe.withDefault(_U.chr(" "))($Array.get(index)(model.sample))))]));
+      }();
+   });
+   var sample_word = function (m) {
+      return A2($Html.div,
+      _L.fromArray([myStyle]),
+      A3($Array.foldr,
+      F2(function (x,acc) {
+         return A2($List._op["::"],
+         A2(sample_char,x,m),
+         acc);
+      }),
+      _L.fromArray([]),
+      $Array.fromList(_L.range(0,
+      $Array.length(m.sample) - 1))));
+   };
+   var makeMessage = F3(function (address,
+   model,
+   str) {
+      return function () {
+         var typed_count = $String.length(str);
+         var new_model = _U.cmp(typed_count,
+         $Array.length(model.sample)) > -1 ? function () {
+            var current_word = _U.cmp(model.current_word + 1,
+            $Array.length($DevTypeModel.wordArray)) > -1 ? 0 : model.current_word + 1;
+            var a = A2($Debug.watch,
+            "test",
+            current_word);
+            return {_: {}
+                   ,current_char: 0
+                   ,current_word: current_word
+                   ,sample: $Array.fromList($String.toList($DevTypeModel.nextWord(current_word)))
+                   ,typed: $Array.fromList(_L.fromArray([]))};
+         }() : {_: {}
+               ,current_char: $String.length(str)
+               ,current_word: model.current_word
+               ,sample: model.sample
+               ,typed: $Array.fromList($String.toList(str))};
+         return A2($Signal.message,
+         address,
+         new_model);
+      }();
+   });
+   var view = F2(function (address,
+   model) {
+      return A2($Html.div,
+      _L.fromArray([body]),
+      _L.fromArray([A2($Html.div,
+      _L.fromArray([word]),
+      _L.fromArray([sample_word(model)
+                   ,A2($Html.input,
+                   _L.fromArray([$Html$Attributes.placeholder("")
+                                ,$Html$Attributes.value($String.fromList($Array.toList(model.typed)))
+                                ,A3($Html$Events.on,
+                                "input",
+                                $Html$Events.targetValue,
+                                A2(makeMessage,address,model))
+                                ,$Html$Attributes.autofocus(true)
+                                ,input_style]),
+                   _L.fromArray([]))
+                   ,A2($Html.div,
+                   _L.fromArray([]),
+                   _L.fromArray([$Html.text($Basics.toString(model.current_char))]))]))]));
+   });
+   var update = F2(function (new_model,
+   old_model) {
+      return new_model;
+   });
+   _elm.DevTypeView.values = {_op: _op
+                             ,update: update
+                             ,view: view
+                             ,makeMessage: makeMessage
+                             ,sample_word: sample_word
+                             ,sample_char: sample_char
+                             ,body: body
+                             ,myStyle: myStyle
+                             ,input_style: input_style
+                             ,word: word
+                             ,normalChar: normalChar
+                             ,currentChar: currentChar
+                             ,errorChar: errorChar
+                             ,goodChar: goodChar
+                             ,untypedChar: untypedChar};
+   return _elm.DevTypeView.values;
+};

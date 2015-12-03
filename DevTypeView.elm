@@ -1,4 +1,4 @@
-module DevType where
+module DevTypeView where
 
 import Html exposing (Html, Attribute, text, toElement, div, input, span)
 import Html.Attributes exposing (..)
@@ -11,41 +11,8 @@ import List exposing (..)
 import Array exposing (..)
 import Debug exposing (..)
 
-main =
-  StartApp.start { model = model, view = view, update = update }
+import DevTypeModel exposing (..)
 
-type alias WordState = {
-       sample: Array Char,
-       typed: Array Char,
-       current_char: Int,
-       current_word: Int
-}
-
-
-wordArray : Array String
-wordArray = 
-  Array.fromList [ "rake db:migrate", "rake db:reset" ]
-
-
-model: WordState
-model = {
-    sample = nextWord 0 
-              |> String.toList 
-              |> Array.fromList, 
-    typed = Array.fromList [],
-    current_char = 0,
-    current_word = 0 }
-
-
-nextWord : Int -> String
-nextWord current_index =
-  let 
-    index = current_index
-  in  
-    wordArray
-    |> Array.get current_index 
-    |> Maybe.withDefault ""
-    
 
 update: WordState -> WordState -> WordState
 update new_model old_model =

@@ -822,9 +822,89 @@ Elm.DevType.make = function (_elm) {
    _U = _N.Utils.make(_elm),
    _L = _N.List.make(_elm),
    $moduleName = "DevType",
+   $Basics = Elm.Basics.make(_elm),
+   $DevTypeModel = Elm.DevTypeModel.make(_elm),
+   $DevTypeView = Elm.DevTypeView.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $StartApp$Simple = Elm.StartApp.Simple.make(_elm);
+   var main = $StartApp$Simple.start({_: {}
+                                     ,model: $DevTypeModel.model
+                                     ,update: $DevTypeView.update
+                                     ,view: $DevTypeView.view});
+   _elm.DevType.values = {_op: _op
+                         ,main: main};
+   return _elm.DevType.values;
+};
+Elm.DevTypeModel = Elm.DevTypeModel || {};
+Elm.DevTypeModel.make = function (_elm) {
+   "use strict";
+   _elm.DevTypeModel = _elm.DevTypeModel || {};
+   if (_elm.DevTypeModel.values)
+   return _elm.DevTypeModel.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "DevTypeModel",
+   $Array = Elm.Array.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var wordArray = $Array.fromList(_L.fromArray(["rake db:migrate"
+                                                ,"rake db:reset"
+                                                ,"rails s"
+                                                ,"rails c"
+                                                ,"binding.pry"
+                                                ,"{h:\'a\', i:\'b\'}"]));
+   var nextWord = function (current_index) {
+      return function () {
+         var index = current_index;
+         return $Maybe.withDefault("")($Array.get(current_index)(wordArray));
+      }();
+   };
+   var model = {_: {}
+               ,current_char: 0
+               ,current_word: 0
+               ,sample: $Array.fromList($String.toList(nextWord(0)))
+               ,typed: $Array.fromList(_L.fromArray([]))};
+   var WordState = F4(function (a,
+   b,
+   c,
+   d) {
+      return {_: {}
+             ,current_char: c
+             ,current_word: d
+             ,sample: a
+             ,typed: b};
+   });
+   _elm.DevTypeModel.values = {_op: _op
+                              ,WordState: WordState
+                              ,wordArray: wordArray
+                              ,model: model
+                              ,nextWord: nextWord};
+   return _elm.DevTypeModel.values;
+};
+Elm.DevTypeView = Elm.DevTypeView || {};
+Elm.DevTypeView.make = function (_elm) {
+   "use strict";
+   _elm.DevTypeView = _elm.DevTypeView || {};
+   if (_elm.DevTypeView.values)
+   return _elm.DevTypeView.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "DevTypeView",
    $Array = Elm.Array.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $DevTypeModel = Elm.DevTypeModel.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $Html$Events = Elm.Html.Events.make(_elm),
@@ -832,7 +912,6 @@ Elm.DevType.make = function (_elm) {
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
-   $StartApp$Simple = Elm.StartApp.Simple.make(_elm),
    $String = Elm.String.make(_elm);
    var untypedChar = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
                                                           ,_0: "color"
@@ -965,23 +1044,6 @@ Elm.DevType.make = function (_elm) {
       $Array.fromList(_L.range(0,
       $Array.length(m.sample) - 1))));
    };
-   var update = F2(function (new_model,
-   old_model) {
-      return new_model;
-   });
-   var wordArray = $Array.fromList(_L.fromArray(["rake db:migrate"
-                                                ,"rake db:reset"]));
-   var nextWord = function (current_index) {
-      return function () {
-         var index = current_index;
-         return $Maybe.withDefault("")($Array.get(current_index)(wordArray));
-      }();
-   };
-   var model = {_: {}
-               ,current_char: 0
-               ,current_word: 0
-               ,sample: $Array.fromList($String.toList(nextWord(0)))
-               ,typed: $Array.fromList(_L.fromArray([]))};
    var makeMessage = F3(function (address,
    model,
    str) {
@@ -990,14 +1052,14 @@ Elm.DevType.make = function (_elm) {
          var new_model = _U.cmp(typed_count,
          $Array.length(model.sample)) > -1 ? function () {
             var current_word = _U.cmp(model.current_word + 1,
-            $Array.length(wordArray)) > -1 ? 0 : model.current_word + 1;
+            $Array.length($DevTypeModel.wordArray)) > -1 ? 0 : model.current_word + 1;
             var a = A2($Debug.watch,
             "test",
             current_word);
             return {_: {}
                    ,current_char: 0
                    ,current_word: current_word
-                   ,sample: $Array.fromList($String.toList(nextWord(current_word)))
+                   ,sample: $Array.fromList($String.toList($DevTypeModel.nextWord(current_word)))
                    ,typed: $Array.fromList(_L.fromArray([]))};
          }() : {_: {}
                ,current_char: $String.length(str)
@@ -1030,41 +1092,26 @@ Elm.DevType.make = function (_elm) {
                    _L.fromArray([]),
                    _L.fromArray([$Html.text($Basics.toString(model.current_char))]))]))]));
    });
-   var WordState = F4(function (a,
-   b,
-   c,
-   d) {
-      return {_: {}
-             ,current_char: c
-             ,current_word: d
-             ,sample: a
-             ,typed: b};
+   var update = F2(function (new_model,
+   old_model) {
+      return new_model;
    });
-   var main = $StartApp$Simple.start({_: {}
-                                     ,model: model
-                                     ,update: update
-                                     ,view: view});
-   _elm.DevType.values = {_op: _op
-                         ,main: main
-                         ,WordState: WordState
-                         ,wordArray: wordArray
-                         ,model: model
-                         ,nextWord: nextWord
-                         ,update: update
-                         ,view: view
-                         ,makeMessage: makeMessage
-                         ,sample_word: sample_word
-                         ,sample_char: sample_char
-                         ,body: body
-                         ,myStyle: myStyle
-                         ,input_style: input_style
-                         ,word: word
-                         ,normalChar: normalChar
-                         ,currentChar: currentChar
-                         ,errorChar: errorChar
-                         ,goodChar: goodChar
-                         ,untypedChar: untypedChar};
-   return _elm.DevType.values;
+   _elm.DevTypeView.values = {_op: _op
+                             ,update: update
+                             ,view: view
+                             ,makeMessage: makeMessage
+                             ,sample_word: sample_word
+                             ,sample_char: sample_char
+                             ,body: body
+                             ,myStyle: myStyle
+                             ,input_style: input_style
+                             ,word: word
+                             ,normalChar: normalChar
+                             ,currentChar: currentChar
+                             ,errorChar: errorChar
+                             ,goodChar: goodChar
+                             ,untypedChar: untypedChar};
+   return _elm.DevTypeView.values;
 };
 Elm.Dict = Elm.Dict || {};
 Elm.Dict.make = function (_elm) {
