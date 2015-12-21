@@ -48,17 +48,15 @@ makeMessage address model str =
     new_model = 
       if typed_count > Array.length model.sample
         then
-          --let
-          --  current_word = 
-          --    if (model.current_word + 1) >= Array.length wordArray
-          --      then 0
-          --    else
-          --      model.current_word + 1
-          --in
-          --  { sample = nextRandomWord, typed = Array.fromList [], current_char = 0, current_word = current_word,
-          --  seed = model.seed }
-          --  --{ sample = nextWord current_word |> String.toList |> Array.fromList, typed = Array.fromList [], current_char = 0, current_word = current_word }
-          createNextModel model
+          let
+            current_word = 
+              if (model.current_word + 1) >= Array.length wordArray
+                then 0
+              else
+                model.current_word + 1
+          in
+            { model0 | sample = nextWord current_word |> String.toList |> Array.fromList, typed = Array.fromList [], current_char = 0, current_word = current_word }
+          --createNextModel model
       else
         { model | typed = Array.fromList( String.toList str ), current_char = (String.length str )}
   in

@@ -10837,8 +10837,16 @@ Elm.KeyZenElmView.make = function (_elm) {
    };
    var makeMessage = F3(function (address,model,str) {
       var typed_count = $String.length(str);
-      var new_model = _U.cmp(typed_count,$Array.length(model.sample)) > 0 ? createNextModel(model) : _U.update(model,
-      {typed: $Array.fromList($String.toList(str)),current_char: $String.length(str)});
+      var new_model = function () {
+         if (_U.cmp(typed_count,$Array.length(model.sample)) > 0) {
+               var current_word = _U.cmp(model.current_word + 1,$Array.length($KeyZenElmModel.wordArray)) > -1 ? 0 : model.current_word + 1;
+               return _U.update($KeyZenElmModel.model0,
+               {sample: $Array.fromList($String.toList($KeyZenElmModel.nextWord(current_word)))
+               ,typed: $Array.fromList(_U.list([]))
+               ,current_char: 0
+               ,current_word: current_word});
+            } else return _U.update(model,{typed: $Array.fromList($String.toList(str)),current_char: $String.length(str)});
+      }();
       return A2($Signal.message,address,new_model);
    });
    var view = F2(function (address,model) {
